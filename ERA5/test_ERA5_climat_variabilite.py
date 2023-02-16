@@ -10,10 +10,10 @@ import cartopy.crs as ccrs
 
 ### Input
 
-Indice_MOIS = '1' #numéro du mois
+Indice_MOIS = '0' #numéro du mois
 FILE = "download.nc" #DATASET NETCDF
 Variable_obs = "sst"
-Unit="K"
+
 
 #t2m, u10, v10, sst, sp, tp
 
@@ -32,6 +32,7 @@ print(np.shape(X))
 Indice_MOIS = int(Indice_MOIS)
 I = np.arange(Indice_MOIS,len(X[:,0,0]),12)  #modulo 12 car 12 mois dans l'année
 
+unit = X.units
 lats = X.coords['latitude']
 lons = X.coords['longitude']
 
@@ -63,7 +64,7 @@ ax.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
 
 titlestr = Variable_obs + ' '+ MOIS[Indice_MOIS-1] + ' '+'1959 - 2022'
 plt.pcolormesh(lons, lats, X_mean, transform=ccrs.PlateCarree(),cmap='RdBu_r',vmax=3)
-plt.colorbar(location='bottom',label=Variable_obs+' '+Unit)
+plt.colorbar(location='bottom',label=Variable_obs+' '+unit)
 plt.title(titlestr,pad=20)
 
 plt.show()
