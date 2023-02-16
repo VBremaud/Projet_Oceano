@@ -46,13 +46,9 @@ for i in range(len(Variable_obs)): #à modifier
         unit = X.units
         lats = X.coords['latitude']
         lons = X.coords['longitude']
+        X_mois =[X.data[i,:,:] for i in I]
 
-        X_mois =[X[i,:,:] for i in I]
-        print(np.shape(X_mois))
-
-        X_mean = np.mean(X_mois,axis=0)
-        if i==0:
-            print(X_mean)
+        X_mean = np.nanmean(X_mois,axis=0)
         VAR_DATA_TIME.append(X_mean)
 
     VAR_UNITS.append(unit)
