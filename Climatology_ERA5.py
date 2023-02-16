@@ -17,15 +17,15 @@ OUTPUT = "Climatology_ERA5.nc"
 ### Input
 
 Indice_MOIS = np.arange(0,12,1) #numéro du mois
-Variable_obs = ["t2m", "u10", "v10", "sst", "sp", "tp"]
+Variable_obs = ["t2m", "u10", "v10", "sst", "sp", "tp", "msl", "cp", "msnlwrf"]
 
 LATITUDE = slice(90,-90)
-LONGITUDE = slice(0,360)
+LONGITUDE = slice(-180,180)
 
 MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Spetembre','Octobre','Novembre','Décembre']
 
 
-#t2m, u10, v10, sst, sp, tp
+#t2m, u10, v10, sst, sp, tp, msl, cp, msnlwrf
 
 ### Traitement
 
@@ -35,7 +35,7 @@ print(X_DS)
 VAR_DATA = []
 VAR_UNITS = []
 
-for i in range(len(Variable_obs)): #à modifier
+for i in range(len(Variable_obs)): 
     VAR_DATA_TIME=[]
     for t in Indice_MOIS :
         X = X_DS[Variable_obs[i]].sel(expver=1, longitude=LONGITUDE, latitude=LATITUDE) #expver=1 reanalyse ERA5
@@ -73,6 +73,9 @@ v10 = ds.createVariable('v10', 'f4', ('time', 'latitude', 'longitude',))
 sst = ds.createVariable('sst', 'f4', ('time', 'latitude', 'longitude',))
 sp = ds.createVariable('sp', 'f4', ('time', 'latitude', 'longitude',))
 tp = ds.createVariable('tp', 'f4', ('time', 'latitude', 'longitude',))
+msl = ds.createVariable('msl', 'f4', ('time', 'latitude', 'longitude',))
+cp = ds.createVariable('cp', 'f4', ('time', 'latitude', 'longitude',))
+msnlwrf = ds.createVariable('msnlwrf', 'f4', ('time', 'latitude', 'longitude',))
 
 times[:]=np.array(Indice_MOIS)+1
 lats1[:]=lats
@@ -85,6 +88,9 @@ v10.units = VAR_UNITS[2]
 sst.units = VAR_UNITS[3]
 sp.units = VAR_UNITS[4]
 tp.units = VAR_UNITS[5]
+msl.units = VAR_UNITS[6]
+cp.units = VAR_UNITS[7]
+msnlwrf.units = VAR_UNITS[8]
 
 for i in range(len(Indice_MOIS)):
     t2m[i,:,:]=np.array(VAR_DATA[0][i])
@@ -93,21 +99,9 @@ for i in range(len(Indice_MOIS)):
     sst[i,:,:]=np.array(VAR_DATA[3][i])
     sp[i,:,:]=np.array(VAR_DATA[4][i])
     tp[i,:,:]=np.array(VAR_DATA[5][i])
+    msl[i,:,:]=np.array(VAR_DATA[6][i])
+    cp[i,:,:]=np.array(VAR_DATA[7][i])
+    msnlwrf[i,:,:]=np.array(VAR_DATA[8][i])
 
 ds.close();
 
-"""
-### Affichage
-
-ax = plt.axes(projection=ccrs.PlateCarree())
-
-ax.coastlines()
-ax.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
-
-titlestr = Variable_obs + ' '+ MOIS[Indice_MOIS-1] + ' '+'1959 - 2022'
-plt.pcolormesh(lons, lats, X_mean, transform=ccrs.PlateCarree(),cmap='RdBu_r')
-plt.colorbar(label=Variable_obs+' '+unit)
-plt.title(titlestr,pad=20)
-
-plt.show()
-"""

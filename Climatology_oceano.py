@@ -13,20 +13,18 @@ import cartopy.crs as ccrs
 ###OPEN FILE
 username = "vbremaud"
 password = "Vincent1"
-URL = "my.cmems-du.eu/thredds/dodsC/cmems_mod_glo_phy_my_0.083_P1M-m" #sans le http://
+URL = "my.cmems-du.eu/thredds/dodsC/global-reanalysis-phy-001-031-grepv2-monthly" #sans le http://
 OUTPUT = "Climatology_oceano.nc"
 
 ### Input
 
 Indice_MOIS = np.arange(0,12,1) #numéro du mois
-Variable_obs = ["mlotst", "zos", "thetao"]
+Variable_obs = ["mlotst_oras", "zos_oras"]
 
-LATITUDE = slice(-90,90) #opposé à ERA5
+LATITUDE = slice(-30,30) #opposé à ERA5
 LONGITUDE = slice(-180,180) #attention différent de ERA5
 
-DEPTH = 0 #if data product
-
-#mlotst, zos, thetao
+#mlotst, zos, 
 
 MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Spetembre','Octobre','Novembre','Décembre']
 
@@ -42,31 +40,31 @@ print(X_DS)
 VAR_DATA = []
 VAR_UNITS = []
 
-for i in range(len(Variable_obs)): #à modifier
+
+VAR_DATA = []
+VAR_UNITS = []
+
+for i in range(len(Variable_obs)): 
     VAR_DATA_TIME=[]
+    print(i)
     for t in Indice_MOIS :
-        X = X_DS[Variable_obs[i]].sel(longitude=LONGITUDE, latitude=LATITUDE)
-        print(np.shape(X))
+        print(t)
+        X = X_DS[Variable_obs[i]].sel(longitude=LONGITUDE, latitude=LATITUDE) #expver=1 reanalyse ERA5
+        #print(np.shape(X))
 
         I = np.arange(t,len(X[:,0,0]),12)  #modulo 12 car 12 mois dans l'année
-        print('ok')
-        print(I)
+
         unit = X.units
         lats = X.coords['latitude']
         lons = X.coords['longitude']
-        print('ok2')
-        X_mois=np.empty([len(I),len(X[0,:,0]),len(X[0,0,:])])
-        for j in range(len(I)) :
-            print('ok')
-            k=I[j]
-            X_mois[j,:,:] = X[k,:,:]
-        print(np.shape(X_mois))
+        X_mois =[X.data[i,:,:] for i in I]
 
-        X_mean = np.mean(X_mois,axis=0)
+        X_mean = np.nanmean(X_mois,axis=0)
         VAR_DATA_TIME.append(X_mean)
-    print(i)
+
     VAR_UNITS.append(unit)
     VAR_DATA.append(VAR_DATA_TIME)
+
 
 
 ds = Dataset(OUTPUT, mode="w")
@@ -83,7 +81,7 @@ lats1 = ds.createVariable('latitude', 'f4', ('latitude',))
 
 mlotst = ds.createVariable('mlotst', 'f4', ('time', 'latitude', 'longitude',))
 zos = ds.createVariable('zos', 'f4', ('time', 'latitude', 'longitude',))
-thetao = ds.createVariable('thetao', 'f4', ('time', 'latitude', 'longitude',))
+#thetao = ds.createVariable('thetao', 'f4', ('time', 'latitude', 'longitude',))
 
 
 times[:]=np.array(Indice_MOIS)+1
@@ -93,12 +91,12 @@ lons1[:]=lons
 #add netcdf attributes
 mlotst.units = VAR_UNITS[0]
 zos.units = VAR_UNITS[1]
-thetao.units = VAR_UNITS[2]
+#thetao.units = VAR_UNITS[2]
 
 for i in range(len(Indice_MOIS)):
     mlotst[i,:,:]=np.array(VAR_DATA[0][i])
     zos[i,:,:]=np.array(VAR_DATA[1][i])
-    thetao[i,:,:]=np.array(VAR_DATA[2][i])
+    #thetao[i,:,:]=np.array(VAR_DATA[2][i])
 
 
 ds.close();
