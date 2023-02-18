@@ -1,3 +1,8 @@
+"""
+Calcule la moyenne climatologique pour chaque mois des variables ERA5 contenu dans le fichier download.nc. Renvoi un fichier netcdf contenant les moyennes climatiques pour chaque mois de l'année.
+"""
+
+
 from netCDF4 import Dataset
 import os
 import xarray as xr
@@ -17,7 +22,7 @@ OUTPUT = "Climatology_ERA5.nc"
 ### Input
 
 Indice_MOIS = np.arange(0,12,1) #numéro du mois
-Variable_obs = ["t2m", "u10", "v10", "sst", "sp", "tp", "msl", "cp", "msnlwrf"]
+Variable_obs = ["t2m", "u10", "v10", "sst", "sp", "tp", "msl", "cp", "msnlwrf","mslhf","msnlwrfcs","msshf"]
 
 LATITUDE = slice(90,-90)
 LONGITUDE = slice(-180,180)
@@ -25,7 +30,7 @@ LONGITUDE = slice(-180,180)
 MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Spetembre','Octobre','Novembre','Décembre']
 
 
-#t2m, u10, v10, sst, sp, tp, msl, cp, msnlwrf
+#t2m, u10, v10, sst, sp, tp, msl, cp, msnlwrf, mslhf, msnlwrfcs, msshf
 
 ### Traitement
 
@@ -35,7 +40,7 @@ print(X_DS)
 VAR_DATA = []
 VAR_UNITS = []
 
-for i in range(len(Variable_obs)): 
+for i in range(len(Variable_obs)):
     VAR_DATA_TIME=[]
     for t in Indice_MOIS :
         X = X_DS[Variable_obs[i]].sel(expver=1, longitude=LONGITUDE, latitude=LATITUDE) #expver=1 reanalyse ERA5
@@ -76,6 +81,9 @@ tp = ds.createVariable('tp', 'f4', ('time', 'latitude', 'longitude',))
 msl = ds.createVariable('msl', 'f4', ('time', 'latitude', 'longitude',))
 cp = ds.createVariable('cp', 'f4', ('time', 'latitude', 'longitude',))
 msnlwrf = ds.createVariable('msnlwrf', 'f4', ('time', 'latitude', 'longitude',))
+mslhf = ds.createVariable('mslhf', 'f4', ('time', 'latitude', 'longitude',))
+msnlwrfcs = ds.createVariable('msnlwrfcs', 'f4', ('time', 'latitude', 'longitude',))
+msshf = ds.createVariable('msshf', 'f4', ('time', 'latitude', 'longitude',))
 
 times[:]=np.array(Indice_MOIS)+1
 lats1[:]=lats
@@ -91,6 +99,9 @@ tp.units = VAR_UNITS[5]
 msl.units = VAR_UNITS[6]
 cp.units = VAR_UNITS[7]
 msnlwrf.units = VAR_UNITS[8]
+mslhf.units = VAR_UNITS[9]
+msnlwrfcs.units = VAR_UNITS[10]
+msshf.units = VAR_UNITS[11]
 
 for i in range(len(Indice_MOIS)):
     t2m[i,:,:]=np.array(VAR_DATA[0][i])
@@ -102,6 +113,9 @@ for i in range(len(Indice_MOIS)):
     msl[i,:,:]=np.array(VAR_DATA[6][i])
     cp[i,:,:]=np.array(VAR_DATA[7][i])
     msnlwrf[i,:,:]=np.array(VAR_DATA[8][i])
+    mslhf[i,:,:]=np.array(VAR_DATA[9][i])
+    msnlwrfcs[i,:,:]=np.array(VAR_DATA[10][i])
+    msshf[i,:,:]=np.array(VAR_DATA[11][i])
 
 ds.close();
 

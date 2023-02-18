@@ -1,3 +1,7 @@
+"""
+Affiche l'anomalie d'un mois d'une année donnée par rapport à la climatologie. Exemple : voir anomalie de SST décembre 1997, El Nino.
+"""
+
 import xarray as xr
 import warnings
 import matplotlib.pyplot as plt
@@ -13,13 +17,12 @@ FILE2 = "download.nc"
 
 ### Input
 
-Indice_MOIS = '1' #numéro du mois 1 pour janvier etc
-Variable_obs = "tp"
+Indice_MOIS = '12' #numéro du mois 1 pour janvier etc
+Variable_obs = "sst"
 
-LATITUDE = slice(90,-90) #50 / -50
-LONGITUDE = slice(0,360) #120 / 200
-
-ANNEE = '2021'
+LATITUDE = slice(90,-90)
+LONGITUDE = slice(-180,180)
+ANNEE = '1997'
 
 TIME = ANNEE+'-'+Indice_MOIS
 MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Spetembre','Octobre','Novembre','Décembre']

@@ -1,3 +1,8 @@
+"""
+Télécharge dans un fichier download_annee.nc les données journalières sur une année d'une variable d'intérêt sur la bande équatoriale.
+"""
+
+
 import cdsapi
 
 c = cdsapi.Client()

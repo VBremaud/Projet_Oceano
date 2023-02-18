@@ -1,3 +1,7 @@
+"""
+Affiche l'anomalie d'une journée donnée par rapport à la climatologie. À partir d'un fichier netcdf.
+"""
+
 import xarray as xr
 import warnings
 import matplotlib.pyplot as plt
