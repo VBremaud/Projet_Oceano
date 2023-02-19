@@ -25,7 +25,7 @@ OUTPUT = "Climatology_oceano_3d.nc"
 ### Input
 
 Indice_MOIS = np.arange(0,12,1) #numéro du mois
-Variable_obs = ["uo_oras", "vo_oras"," thetao_oras"]
+Variable_obs = ["uo_oras", "vo_oras","thetao_oras"]
 
 LATITUDE = slice(-30,30) #opposé à ERA5
 LONGITUDE = 1439 #dernière longitude de la liste
@@ -64,10 +64,8 @@ for i in range(len(Variable_obs)):
 
         X_mean = np.nanmean(X_mois,axis=0)
         VAR_DATA_TIME.append(X_mean)
-
     VAR_UNITS.append(unit)
     VAR_DATA.append(VAR_DATA_TIME)
-
 
 
 ds = Dataset(OUTPUT, mode="w")
@@ -75,21 +73,22 @@ ds = Dataset(OUTPUT, mode="w")
 ds.set_fill_off()
 
 time = ds.createDimension('time', len(MOIS))
-longitude = ds.createDimension('longitude', len(lons))
+#longitude = ds.createDimension('longitude', len(lons))
 latitude = ds.createDimension('latitude', len(lats))
+depth = ds.createDimension('depth', len(depths))
 
 times = ds.createVariable('time', 'f4', ('time',))
-lons1 = ds.createVariable('longitude', 'f4', ('longitude',))
+#lons1 = ds.createVariable('longitude', 'f4', ('longitude',))
 lats1 = ds.createVariable('latitude', 'f4', ('latitude',))
 depths1 = ds.createVariable('depth', 'f4', ('depth',))
 
-uo = ds.createVariable('uo', 'f4', ('time', 'depth','latitude', 'longitude'))
-vo = ds.createVariable('vo', 'f4', ('time', 'depth','latitude', 'longitude'))
-thetao = ds.createVariable('thetao', 'f4', ('time', 'depth','latitude', 'longitude'))
+uo = ds.createVariable('uo', 'f4', ('time', 'depth','latitude'))
+vo = ds.createVariable('vo', 'f4', ('time', 'depth','latitude'))
+thetao = ds.createVariable('thetao', 'f4', ('time', 'depth','latitude'))
 
 times[:]=np.array(Indice_MOIS)+1
 lats1[:]=lats
-lons1[:]=lons
+#lons1[:]=lons
 depths1[:]=depths
 
 #add netcdf attributes
