@@ -17,7 +17,7 @@ FILE = "../Climatology_ERA5.nc" #DATASET NETCDF #attention au nom du fichier
 
 ### Input
 
-Variable_obs = "v10"
+Variable_obs = "sst"
 
 LATITUDE = slice(30,-30) #be careful à la latitude opposé ERA5
 LONGITUDE = slice(-180,180)
@@ -38,12 +38,29 @@ print(X_DS)
 print(X_DS[Variable_obs].coords)
 
 X = X_DS[Variable_obs].sel(longitude=LONGITUDE,latitude=LATITUDE)
+U0 = X_DS["u10"].sel(longitude=LONGITUDE,latitude=LATITUDE)
+V0 = X_DS["v10"].sel(longitude=LONGITUDE,latitude=LATITUDE)
 
 X_mean = np.mean(X,axis=0)
+U0_mean = np.mean(U0,axis=0)
+V0_mean = np.mean(V0,axis=0)
+print(np.shape(X_mean),np.shape(U0_mean),np.shape(V0_mean))
 
 lats = X.coords['latitude']
 lons = X.coords['longitude']
 unit = X.units
+
+I = np.arange(0,len(lons),20)
+J = np.arange(0,len(lats),20)
+LONS = [lons.data[i] for i in I]
+LATS = [lats.data[j] for j in J]
+U0_M = np.empty([len(LATS),len(LONS)])
+V0_M = np.empty([len(LATS),len(LONS)])
+
+for j in range(len(J)):
+    for i in range(len(I)):
+        U0_M[j,i]=U0_mean.data[J[j],I[i]]
+        V0_M[j,i]=V0_mean.data[J[j],I[i]]
 
 ### Affichage
 
@@ -55,6 +72,8 @@ ax.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
 titlestr='Moyenne annuelle climatique 1959 - 2022 '+Variable_obs
 
 plt.pcolormesh(lons, lats, X_mean, transform=ccrs.PlateCarree(),cmap='viridis')
+print(np.shape(U0_M),np.shape(V0_M),len(LONS),len(LATS))
+plt.quiver(np.array(LONS),np.array(LATS),U0_M,V0_M,scale=500,headlength=7,headwidth=5,width=0.001,transform=ccrs.PlateCarree())
 plt.colorbar(label=Variable_obs+' '+unit)
 plt.title(titlestr,pad=20)
 

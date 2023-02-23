@@ -1,8 +1,9 @@
 """
-Affiche la moyenne climatique d'une variable sur une année à partir de la climatologie mensuelle.
+Affiche l'écart type interannuel d'une variable (moyenne sur les années puis écart type). ERA5 ONLY
 """
 
-
+from netCDF4 import Dataset
+import os
 import xarray as xr
 import warnings
 import matplotlib.pyplot as plt
@@ -11,18 +12,21 @@ import numpy as np
 from scipy.interpolate import interp2d
 import cartopy.crs as ccrs
 
+#print(ds.info())
 
 ###OPEN FILE
-FILE = "../Climatology_ERA5.nc" #DATASET NETCDF #attention au nom du fichier
+FILE = "download.nc" #DATASET NETCDF
 
 ### Input
 
-Variable_obs = "v10"
+Variable_obs = "sst" #ERA5 ONLY
 
-LATITUDE = slice(30,-30) #be careful à la latitude opposé ERA5
+LATITUDE = slice(30,-30)
 LONGITUDE = slice(-180,180)
 
+
 MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Spetembre','Octobre','Novembre','Décembre']
+
 
 #t2m, u10, v10, sst, sp, tp, msl, cp, msnlwrf, mslhf, msnlwrfcs, msshf
 #mlotst, zos,
@@ -37,9 +41,21 @@ X_DS =  xr.open_dataset(FILE)
 print(X_DS)
 print(X_DS[Variable_obs].coords)
 
-X = X_DS[Variable_obs].sel(longitude=LONGITUDE,latitude=LATITUDE)
+X = X_DS[Variable_obs].sel(longitude=LONGITUDE,latitude=LATITUDE).sel(expver=1)
 
-X_mean = np.mean(X,axis=0)
+lats = X.coords['latitude']
+lons = X.coords['longitude']
+unit = X.units
+
+N = int(len(X[:,0,0])/12)
+X_annual = np.empty([N, len(lats),len(lons)])
+
+
+for i in range(N):
+    Y = X.data[N*i:N*(i+1),:,:]
+    X_annual[i,:,:] = np.mean(X.data[N*i:N*(i+1),:,:],axis=0)
+
+X_std = np.nanstd(X_annual,axis=0)
 
 lats = X.coords['latitude']
 lons = X.coords['longitude']
@@ -52,9 +68,9 @@ ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=180))
 ax.coastlines()
 ax.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
 
-titlestr='Moyenne annuelle climatique 1959 - 2022 '+Variable_obs
+titlestr='Ecart type interannuel 1959 - 2022 '+Variable_obs
 
-plt.pcolormesh(lons, lats, X_mean, transform=ccrs.PlateCarree(),cmap='viridis')
+plt.pcolormesh(lons, lats, X_std, transform=ccrs.PlateCarree(),cmap='viridis')
 plt.colorbar(label=Variable_obs+' '+unit)
 plt.title(titlestr,pad=20)
 
