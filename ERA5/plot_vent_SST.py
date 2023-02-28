@@ -71,10 +71,11 @@ ax.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
 
 titlestr='Moyenne annuelle climatique 1959 - 2022 '+Variable_obs
 
-plt.pcolormesh(lons, lats, X_mean, vmin=0,vmax=0.015, transform=ccrs.PlateCarree(),cmap='Blues')
-plt.colorbar(label=Variable_obs+' '+unit,cmap='Blues')
+plt.pcolormesh(lons, lats, X_mean,vmax=0.015, transform=ccrs.PlateCarree(),cmap='Blues')
+plt.colorbar(label=Variable_obs+' '+unit)
 print(np.shape(U0_M),np.shape(V0_M),len(LONS),len(LATS))
 plt.quiver(np.array(LONS),np.array(LATS),U0_M,V0_M,scale=500,headlength=7,headwidth=5,width=0.001,transform=ccrs.PlateCarree())
 plt.title(titlestr,pad=20)
+
 
 plt.show()

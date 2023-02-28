@@ -13,13 +13,13 @@ import cartopy.crs as ccrs
 
 
 ###OPEN FILE
-FILE = "../Climatology_oceano.nc" #DATASET NETCDF #attention au nom du fichier
+FILE = "../Climatology_ERA5.nc" #DATASET NETCDF #attention au nom du fichier
 
 ### Input
 
-Variable_obs = "mlotst"
+Variable_obs = "sst"
 
-LATITUDE = slice(-30,30) #be careful à la latitude opposé ERA5
+LATITUDE = slice(30,-30) #be careful à la latitude opposé ERA5
 LONGITUDE = slice(-180,180)
 
 MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Spetembre','Octobre','Novembre','Décembre']

@@ -52,7 +52,7 @@ ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=180))
 ax.coastlines()
 ax.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
 
-titlestr='Moyenne annuelle climatique hiver DJV 1959 - 2022 '+Variable_obs
+titlestr='Moyenne annuelle climatique hiver DJF 1959 - 2022 '+Variable_obs
 
 plt.pcolormesh(lons, lats, (X[11]+X[0]+X[1])/3, transform=ccrs.PlateCarree(),cmap='viridis')
 plt.colorbar(label=Variable_obs+' '+unit)
