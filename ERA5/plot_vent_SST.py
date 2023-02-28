@@ -17,7 +17,7 @@ FILE = "../Climatology_ERA5.nc" #DATASET NETCDF #attention au nom du fichier
 
 ### Input
 
-Variable_obs = "sst"
+Variable_obs = "tp"
 
 LATITUDE = slice(30,-30) #be careful à la latitude opposé ERA5
 LONGITUDE = slice(-180,180)
@@ -71,10 +71,11 @@ ax.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
 
 titlestr='Moyenne annuelle climatique 1959 - 2022 '+Variable_obs
 
-plt.pcolormesh(lons, lats, X_mean, transform=ccrs.PlateCarree(),cmap='viridis')
+plt.pcolormesh(lons, lats, X_mean,vmax=0.015, transform=ccrs.PlateCarree(),cmap='Blues')
+plt.colorbar(label=Variable_obs+' '+unit)
 print(np.shape(U0_M),np.shape(V0_M),len(LONS),len(LATS))
 plt.quiver(np.array(LONS),np.array(LATS),U0_M,V0_M,scale=500,headlength=7,headwidth=5,width=0.001,transform=ccrs.PlateCarree())
-plt.colorbar(label=Variable_obs+' '+unit)
 plt.title(titlestr,pad=20)
+
 
 plt.show()
