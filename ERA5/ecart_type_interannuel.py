@@ -21,7 +21,7 @@ FILE = "download.nc" #DATASET NETCDF
 
 Variable_obs = "sst" #ERA5 ONLY
 
-LATITUDE = slice(30,-30)
+LATITUDE = slice(20,-20)
 LONGITUDE = slice(-180,180)
 
 

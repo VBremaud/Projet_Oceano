@@ -45,7 +45,7 @@ unit = X.units
 ax = plt.axes()
 titlestr='Moyenne annuelle climatique 1959 - 2022  à 180°E '+Variable_obs
 
-plt.pcolormesh(lats, depths, X_mean,cmap='viridis')
+plt.contourf(lats, depths, X_mean,levels=100,cmap='viridis')
 plt.colorbar(label=Variable_obs+' '+unit)
 ax.invert_yaxis()
 plt.title(titlestr,pad=20)
