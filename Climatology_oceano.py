@@ -42,10 +42,7 @@ print(X_DS)
 
 VAR_DATA = []
 VAR_UNITS = []
-
-
-VAR_DATA = []
-VAR_UNITS = []
+VAR_DATA_TIME=[]
 
 for i in range(len(Variable_obs)):
     VAR_DATA_TIME=[]
