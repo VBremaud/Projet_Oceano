@@ -13,7 +13,7 @@ c.retrieve(
         'variable': [
             '10m_u_component_of_wind', '10m_v_component_of_wind', '2m_temperature',
             'convective_precipitation', 'mean_sea_level_pressure', 'mean_surface_net_long_wave_radiation_flux',
-            'sea_surface_temperature', 'surface_pressure', 'total_precipitation','mean_surface_latent_heat_flux', 'mean_surface_net_long_wave_radiation_flux_clear_sky', 'mean_surface_sensible_heat_flux',
+            'sea_surface_temperature', 'surface_pressure', 'total_precipitation','mean_surface_latent_heat_flux', 'mean_surface_sensible_heat_flux','mean_top_net_long_wave_radiation_flux','mean_convective_precipitation_rate'
         ],
         'year': [
             '1959', '1960', '1961',

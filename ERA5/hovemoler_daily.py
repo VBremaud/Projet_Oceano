@@ -98,7 +98,7 @@ TEMPS = np.linspace(2013,2015,len(X_final[:,0]))
 
 ### Affichage
 
-vmax=max(np.max(X_final),-np.min(X_final))
+vmax=max(np.nanmax(X_Final),-np.nanmin(X_Final))
 vmin=-vmax
 
 titlestr = 'Hovmöller anomalie de SSH équateur 5-day mean'

@@ -22,7 +22,7 @@ OUTPUT = "Climatology_ERA5.nc"
 ### Input
 
 Indice_MOIS = np.arange(0,12,1) #numéro du mois
-Variable_obs = ["t2m", "u10", "v10", "sst", "sp", "tp", "msl", "cp", "msnlwrf","mslhf","msnlwrfcs","msshf"]
+Variable_obs = ["t2m", "u10", "v10", "sst", "sp", "tp", "msl", "cp","mslhf","mtnlwrf","msshf","mcpr"]
 
 LATITUDE = slice(90,-90)
 LONGITUDE = slice(-180,180)
@@ -80,10 +80,10 @@ sp = ds.createVariable('sp', 'f4', ('time', 'latitude', 'longitude',))
 tp = ds.createVariable('tp', 'f4', ('time', 'latitude', 'longitude',))
 msl = ds.createVariable('msl', 'f4', ('time', 'latitude', 'longitude',))
 cp = ds.createVariable('cp', 'f4', ('time', 'latitude', 'longitude',))
-msnlwrf = ds.createVariable('msnlwrf', 'f4', ('time', 'latitude', 'longitude',))
 mslhf = ds.createVariable('mslhf', 'f4', ('time', 'latitude', 'longitude',))
-msnlwrfcs = ds.createVariable('msnlwrfcs', 'f4', ('time', 'latitude', 'longitude',))
+mtnlwrf = ds.createVariable('mtnlwrf', 'f4', ('time', 'latitude', 'longitude',))
 msshf = ds.createVariable('msshf', 'f4', ('time', 'latitude', 'longitude',))
+mcpr = ds.createVariable('mcpr', 'f4', ('time', 'latitude', 'longitude',))
 
 times[:]=np.array(Indice_MOIS)+1
 lats1[:]=lats
@@ -98,10 +98,11 @@ sp.units = VAR_UNITS[4]
 tp.units = VAR_UNITS[5]
 msl.units = VAR_UNITS[6]
 cp.units = VAR_UNITS[7]
-msnlwrf.units = VAR_UNITS[8]
-mslhf.units = VAR_UNITS[9]
-msnlwrfcs.units = VAR_UNITS[10]
-msshf.units = VAR_UNITS[11]
+mslhf.units = VAR_UNITS[8]
+mtnlwrf.units = VAR_UNITS[9]
+msshf.units = VAR_UNITS[10]
+mcpr.units = VAR_UNITS[11]
+
 
 for i in range(len(Indice_MOIS)):
     t2m[i,:,:]=np.array(VAR_DATA[0][i])
@@ -112,10 +113,10 @@ for i in range(len(Indice_MOIS)):
     tp[i,:,:]=np.array(VAR_DATA[5][i])
     msl[i,:,:]=np.array(VAR_DATA[6][i])
     cp[i,:,:]=np.array(VAR_DATA[7][i])
-    msnlwrf[i,:,:]=np.array(VAR_DATA[8][i])
-    mslhf[i,:,:]=np.array(VAR_DATA[9][i])
-    msnlwrfcs[i,:,:]=np.array(VAR_DATA[10][i])
-    msshf[i,:,:]=np.array(VAR_DATA[11][i])
+    mslhf[i,:,:]=np.array(VAR_DATA[8][i])
+    mtnlwrf[i,:,:]=np.array(VAR_DATA[9][i])
+    msshf[i,:,:]=np.array(VAR_DATA[10][i])
+    mcpr[i,:,:]=np.array(VAR_DATA[11][i])
 
 ds.close();
 

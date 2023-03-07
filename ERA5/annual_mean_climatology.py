@@ -17,7 +17,7 @@ FILE = "../Climatology_ERA5.nc" #DATASET NETCDF #attention au nom du fichier
 
 ### Input
 
-Variable_obs = "sst"
+Variable_obs = "mtnlwrf"
 
 LATITUDE = slice(30,-30) #be careful à la latitude opposé ERA5
 LONGITUDE = slice(-180,180)
